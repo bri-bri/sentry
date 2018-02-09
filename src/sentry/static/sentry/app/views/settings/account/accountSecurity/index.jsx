@@ -18,6 +18,7 @@ import PanelItem from '../../components/panelItem';
 import SettingsPageHeader from '../../components/settingsPageHeader';
 import TextBlock from '../../components/text/textBlock';
 import RemoveConfirm from './components/removeConfirm';
+import PasswordForm from '../passwordForm';
 
 const ENDPOINT = '/users/me/authenticators/';
 
@@ -54,6 +55,9 @@ class AccountSecurity extends AsyncView {
     return (
       <div>
         <SettingsPageHeader title="Security" />
+
+        <PasswordForm />
+
         <Panel>
           <PanelHeader>
             <Box>{t('Two Factor Authentication')}</Box>
