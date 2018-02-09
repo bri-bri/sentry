@@ -11,13 +11,18 @@ from sentry.security import capture_security_activity
 
 
 class UserPasswordSerializer(serializers.ModelSerializer):
-    passwordVerify = serializers.CharField(required=True)
-    passwordNew = serializers.CharField(required=True)
-    password = serializers.CharField(required=True)
+    password = serializers.CharField(label="Current password", required=True)
+    passwordNew = serializers.CharField(label="New password", required=True)
+    passwordVerify = serializers.CharField(label="Confirm new password", required=True)
 
     class Meta:
         model = User
         fields = ('password', 'passwordNew', 'passwordVerify', )
+
+    def validate_password(self, attrs, source):
+        if not self.object.check_password(attrs.get('password')):
+            raise serializers.ValidationError('The password you entered is not correct.')
+        return attrs
 
     def validate_passwordNew(self, attrs, source):
         # this will raise a ValidationError if password is invalid
@@ -30,9 +35,6 @@ class UserPasswordSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         attrs = super(UserPasswordSerializer, self).validate(attrs)
-
-        if not self.object.check_password(attrs.get('password')):
-            raise serializers.ValidationError('The password you entered is not correct.')
 
         # make sure `passwordNew` matches `passwordVerify`
         if not constant_time_compare(attrs.get('passwordNew'), attrs.get('passwordVerify')):
