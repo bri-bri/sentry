@@ -544,6 +544,7 @@ function routes() {
                   lazyLoad(cb)
                 )}
             >
+              {hooksOrgRoutes}
               {orgSettingsRoutes}
             </Route>
 
