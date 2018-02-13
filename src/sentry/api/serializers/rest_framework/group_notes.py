@@ -9,6 +9,7 @@ from sentry.models import User, Team
 
 
 def seperate_actors(actors):
+    """seperates a heterogeneous list of actor classes into categories"""
     users = [actor for actor in actors if actor.type is User]
     teams = [actor for actor in actors if actor.type is Team]
 
@@ -16,6 +17,7 @@ def seperate_actors(actors):
 
 
 def seperate_resolved_actors(actors):
+    """seperates a list of user and team model instances into categories"""
     users = [actor for actor in actors if isinstance(actor, User)]
     teams = [actor for actor in actors if isinstance(actor, Team)]
 
